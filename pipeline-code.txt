@@ -34,8 +34,11 @@ pipeline {
                     env.PATH = "${nodeHome}/bin:${env.PATH}"
                 }
                 dir("${env.FRONTEND_DIR}") {
+                    // clean install
+                    sh 'rm -rf node_modules dist package-lock.json'
                     sh 'npm install'
-                    sh 'npm run build'
+                    // use npx instead of direct vite binary
+                    sh 'npx vite build'
                 }
             }
         }
@@ -46,7 +49,9 @@ pipeline {
                     def warDir = "${env.FRONTEND_DIR}/war_content"
                     sh "rm -rf ${warDir}"
                     sh "mkdir -p ${warDir}/META-INF ${warDir}/WEB-INF"
+                    // copy Vite dist output
                     sh "cp -r ${env.FRONTEND_DIR}/dist/* ${warDir}/"
+                    // package WAR
                     sh "jar -cvf ${env.FRONTEND_WAR} -C ${warDir} ."
                 }
             }
