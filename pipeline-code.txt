@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         // use JDK 21 that you configured in Jenkins global tool config
-        jdk 'JDK21_HOME'
+        jdk 'JDK_HOME'
         maven 'MAVEN_HOME'
     }
 
